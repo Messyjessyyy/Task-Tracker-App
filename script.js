@@ -1,82 +1,40 @@
-// script.js
-// Section 1: TODOs
-// TODO: Register submissions from the user on the form.
-// TODO: Determine the value of the data submitted and add it to a JavaScript array called tasks.
-// TODO: Call the render function to update the table with the new tasks.
+const form = document.getElementById('taskForm');
+const taskTableBody = document.querySelector('#taskTable tbody');
 
-// Section 2: App State Variables
-let tasks = [];
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
 
-// Section 3: Cached Element References
-const taskForm = document.getElementById("taskForm");
-const taskTable = document.getElementById("taskTable");
-
-// Section 4: Functions and Event Listeners
-// Function to handle form submissions
-function handleSubmission(event) {
-    event.preventDefault(); // this function stops our form from reloading the page
-    
-    // TODO: Get form input values
     const taskName = document.getElementById('taskName').value;
     const taskDescription = document.getElementById('taskDescription').value;
     const taskDeadline = document.getElementById('taskDeadline').value;
-    
-    // TODO: Validate input fields
-    if (!taskName || !taskDeadline) {
-        alert('Task name and deadline are required!');
+
+    if (!taskName || !taskDescription || !taskDeadline) {
+        alert('Please fill in all fields');
         return;
     }
-    
-    // TODO: Update the tasks array
-    tasks.push({ name: taskName, description: taskDescription, deadline: taskDeadline });
-    
-    // Clear the form
-    document.getElementById('taskName').value = '';
-    document.getElementById('taskDescription').value = '';
-    document.getElementById('taskDeadline').value = '';
-    
-    render();
-}
 
-// Function to render tasks in the table
-function render() {
-    // TODO: Use array methods to create a new table row of data for each item in the array
-    const tbody = taskTable.querySelector('tbody');
-    tbody.innerHTML = tasks.map((task, index) => `
-        <tr>
-            <td>${task.name}</td>
-            <td>${task.description}</td>
-            <td>${task.deadline}</td>
-            <td><button class="complete-btn" onclick="markTaskComplete(${index})">Complete</button></td>
-            <td><button class="remove-btn" onclick="removeTask(${index})">Remove</button></td>
-        </tr>
-    `).join('');
-}
+    const row = document.createElement('tr');
 
-// Function to mark task as complete
-function markTaskComplete(index) {
-    alert(`Task "${tasks[index].name}" marked as complete!`);
-    // You could add functionality here to change the task's appearance or status
-}
+    row.innerHTML = `
+        <td>${taskName}</td>
+        <td>${taskDescription}</td>
+        <td>${taskDeadline}</td>
+        <td><button class="complete">Complete</button></td>
+        <td><button class="remove">Remove</button></td>
+    `;
 
-// Function to remove task
-function removeTask(index) {
-    tasks.splice(index, 1);
-    render();
-}
+    // Complete button
+    row.querySelector('.complete').addEventListener('click', () => {
+        row.style.textDecoration = row.style.textDecoration === 'line-through' ? '' : 'line-through';
+    });
 
-// Function to initialize the table
-function init() {
-    const tbody = taskTable.querySelector('tbody');
-    if (tbody) {
-        tbody.innerHTML = ''; // Clear the table body
-    }
-    tasks = []; // Reset the tasks array
-    render(); // Call the render function
-}
+    // Remove button
+    row.querySelector('.remove').addEventListener('click', () => {
+        row.remove();
+    });
 
-// Event listener for form submission
-taskForm.addEventListener('submit', handleSubmission);
+    taskTableBody.appendChild(row);
 
-// Call the init function to set up the initial state of the app
-init();
+    // Clear form
+    form.reset();
+});

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posture Check - Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Analysis</h1>
+        <p id="exerciseType"></p>
+        <p id="videoInfo"></p>
+        <ul id="recommendationList"></ul>
+        <button onclick="goBack()">Go Back</button>
+    </div>
+
+    <script>
+        // Retrieve data from localStorage
+        const liftType = localStorage.getItem('liftType');
+        const videoName = localStorage.getItem('videoName');
+
+        document.getElementById('exerciseType').textContent = `Exercise: ${liftType}`;
+        document.getElementById('videoInfo').textContent = videoName ? `Uploaded Video: ${videoName}` : 'No video uploaded';
+
+        const recommendationList = document.getElementById('recommendationList');
+
+        // Simple recommendations
+        const recommendations = [];
+        if (liftType === 'squat') {
+            recommendations.push('Keep your chest up and knees out.');
+            recommendations.push('Engage your core to protect your lower back.');
+            recommendations.push('Warm up with goblet squats or bodyweight squats.');
+        } else if (liftType === 'deadlift') {
+            recommendations.push('Maintain a neutral spine.');
+            recommendations.push('Engage glutes and hamstrings.');
+            recommendations.push('Avoid rounding your lower back.');
+        } else if (liftType === 'benchPress') {
+            recommendations.push('Keep shoulder blades retracted.');
+            recommendations.push('Use controlled motion.');
+            recommendations.push('Warm up with dumbbell presses.');
+        } else if (liftType === 'other') {
+            recommendations.push('Perform proper warm-up and focus on form.');
+        }
+
+        // Display recommendations
+        recommendations.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            recommendationList.appendChild(li);
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

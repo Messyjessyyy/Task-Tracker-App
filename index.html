@@ -3,35 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posture Check - Upload</title>
     <link rel="stylesheet" href="style.css">
-    <title>Task Tracker</title>
 </head>
 <body>
     <div class="container">
-        <h1>Task Tracker</h1>
-        <form id="taskForm">
-            <label for="taskName">Task name:</label><br>
-            <input type="text" id="taskName" name="taskName"><br>
-            <label for="taskDescription">Description:</label><br>
-            <textarea id="taskDescription" name="taskDescription"></textarea><br><br>
-            <label for="taskDeadline">Task deadline:</label><br>
-            <input type="date" id="taskDeadline" name="taskDeadline"><br>
-            <button type="submit">Add Task</button>
+        <h1>Posture Check</h1>
+
+        <form id="liftForm">
+            <label for="liftType">Select Exercise:</label><br>
+            <select id="liftType" name="liftType" required>
+                <option value="">Select</option>
+                <option value="squat">Squat</option>
+                <option value="deadlift">Deadlift</option>
+                <option value="benchPress">Bench Press</option>
+                <option value="other">Other</option>
+            </select><br><br>
+
+            <label for="liftVideo">Upload Video (optional):</label><br>
+            <input type="file" id="liftVideo" name="liftVideo" accept="video/*"><br><br>
+
+            <button type="submit">Get Analysis</button>
         </form>
-        <table id="taskTable">
-            <thead>
-                <tr>
-                    <th>Task Name</th>
-                    <th>Description</th>
-                    <th>Deadline</th>
-                    <th>Complete</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const liftForm = document.getElementById('liftForm');
+
+        liftForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const liftType = document.getElementById('liftType').value;
+            const videoInput = document.getElementById('liftVideo');
+
+            // Save exercise selection to localStorage
+            localStorage.setItem('liftType', liftType);
+
+            // Optional: Save file name (we can't save full video in localStorage)
+            if (videoInput.files.length > 0) {
+                localStorage.setItem('videoName', videoInput.files[0].name);
+            } else {
+                localStorage.removeItem('videoName');
+            }
+
+            // Redirect to analysis page
+            window.location.href = 'analysis.html';
+        });
+    </script>
 </body>
 </html>
